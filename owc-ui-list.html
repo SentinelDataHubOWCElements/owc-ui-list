@@ -1,13 +1,45 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../owc-hello/hello-owc.html">
+<link rel="import" href="../owc-ui-row-item/owc-ui-row-item.html">
+
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
 
 <dom-module id="owc-ui-list">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
+      <style>
+          :host {
+            display: block;
+          }
+
+          *{
+            font-family: 'Roboto', 'Noto', sans-serif;
+            font-weight: bold;
+          }
+  
+          .container{
+            width: 200px;
+          }
+
+          iron-list {
+            background-color: lightgray;
+          }
+          
+          .item {
+            border-bottom: 2px solid rgb(59, 56, 56);
+            height: 45px;
+          }
+
+        </style>
+        <div class="container">
+
+          <h3>Owc-Ui-List</h3>
+
+          <iron-list items="[[items]]">
+              <template>
+                <div class="item">Item [[index]]</div>
+              </template>
+          </iron-list>
+        </div>
   </template>
 
   <script>
@@ -26,6 +58,13 @@
           prop1: {
             type: String,
             value: 'owc-ui-list'
+          },
+
+          items: {
+            type: Array,
+            value: function() {
+              return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+            }
           }
         };
       }
