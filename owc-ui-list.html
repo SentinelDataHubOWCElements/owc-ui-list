@@ -1,8 +1,10 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../owc-hello/hello-owc.html">
-<link rel="import" href="../owc-ui-row-item/owc-ui-row-item.html">
 
+<!-- list adapter -->
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<!-- row-item -->
+<link rel="import" href="../owc-ui-row-item/owc-ui-row-item.html">
 
 <dom-module id="owc-ui-list">
   <template>
@@ -34,17 +36,37 @@
         background-color: lightgray;
       }
     </style>
-    <div class="container">
+    <div id="scrollable" class="container">
 
       <h3>Owc-Ui-List</h3>
 
-      <iron-list items="[[items]]">
-        <template>
-          <div class="item">Item [[index]]
-            <owc-ui-row-item></owc-ui-row-item>
-          </div>
-        </template>
-      </iron-list>
+
+      <template is="dom-if" if="{{default}}">
+        <div>Total items: {{items.length}}</div>
+        <iron-list id="ironlist" class="owclist" items="{{items}}" as="item" hidden="{{!visibleList}}">
+          <template>
+            <div class="item">
+              <div>{{index}}</div>
+              <div>{{item.name}}</div>
+              <div>{{item.owner}}</div>
+              <div>{{item.maxSpeed}}</div>
+              <!-- <owc-ui-row-item> -->
+              <!-- </owc-ui-row-item> -->
+            </div> if="{{default}}"
+          </template>
+        </iron-list>
+      </template>
+
+      <!-- <template is="dom-if" if="{{default}}">
+        <iron-list id="ironlist" class="owclist" items="{{items}}" as="product" style="width: 100%!important" hidden="{{!visibleList}}">
+          <template>
+            <button-list-item parent="{{that}}" iscart="{{isCart}}" iscalendar="{{isCalendar}}" target="{{target}}" cart="{{cartIds}}"
+              cartmngr="{{cartManager}}" index="{{index}}" model="{{product}}" class="owc-list-item"></button-list-item>
+          </template>
+        </iron-list>
+      </template> -->
+
+
     </div>
   </template>
 
@@ -70,7 +92,28 @@
           items: {
             type: Array,
             value: function () {
-              return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+              return [
+                {
+                  name: 'volvo',
+                  owner: 'carlo',
+                  maxSpeed: 100
+                },
+                {
+                  name: 'fiat',
+                  owner: 'giovanni',
+                  maxSpeed: 150
+                },
+                {
+                  name: 'toyota',
+                  owner: 'maria',
+                  maxSpeed: 220
+                },
+                {
+                  name: 'ferrari',
+                  owner: 'giulia',
+                  maxSpeed: 300
+                },
+              ];
             }
           },
 
