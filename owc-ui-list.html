@@ -12,35 +12,36 @@
   <dom-module id="owc-ui-list">
     <template>
       <style>
-        :host {
-          display: block;
-        }
-
         * {
           font-family: 'Roboto', 'Noto', sans-serif;
         }
 
-        .container {
-          width: 250px;
+        :host {
+          display: block;
+        }
+
+        /* .container {
+          width: 100%;
         }
 
         iron-list {
-          width: 90%;
           background-color: gray;
-        }
+        } */
 
-        .item {
-          font-size: 15px;
-          border-radius: 8px;
-          padding: 0px 10px;
-          background-color: aliceblue;
-          height: 200px;
-          width: 90%;
-          margin-left: 10px !important;
+
+        .itemz {
+          /* font-size: 15px; */
+          /* border-radius: 8px; */
+          /* padding: 0px 0px; */
+          /* background-color: aliceblue; */
+          /* height: 150px; */
+          /* margin-left: 10px !important;
           margin-right: 10px !important;
           margin-top: 5px !important;
-          margin-bottom: 5px !important;
-          border: solid 2px #ecf0f1;
+          margin-bottom: 5px !important; */
+          /* border: solid 2px #ecf0f1; */
+          background-color: lightblue;
+          border-bottom: 3px solid gray;
         }
 
         .thumb {
@@ -51,72 +52,52 @@
           margin-right: 5px;
         }
 
-        #scrollable {
+        /* #scrollable {
           overflow: auto;
-          height: 250px;
-          width: 230px;
+          height: 450px;
+        } */
+
+        .model-identifier {
+          color:lightslategray;
+        }
+
+        .model-uuid {
+          color: dimgrey;
         }
       </style>
-
       <h3>{{componentName}}</h3>
-      <h4>{{i18n('list')}}</h4>
-      <button on-click="testConnection">Test Connection</button>
-      <button on-click="test">Test!</button>
-      <div>Total items: {{items.length}}</div>
 
+      <h4>{{i18n('List')}}</h4>
       <div id="scrollable" class="container">
         <!-- List of Products -->
         <template is="dom-if" if="[default]">
-          <div>Total items: {{items.length}}</div>
-          <iron-list id="ironlist" class="owclist" items="{{items}}" as="item" hidden="{{!visibleList}}">
+          <div>Real Model items: {{model.length}}</div>
+          <!-- <div>Total items: {{items.length}}</div> -->
+          <iron-list id="ironlist" class="owclist" items="{{model}}" as="item" hidden="{{!visibleList}}">
             <!-- List component template -->
             <template>
-              <div class="item">
+              <div class="itemz-container">
+              <div class="itemz">
                 <div>{{index}}</div>
                 <div>
-                  <b>Title:</b> [[item.title]]</div>
+                  <b>Identifier:</b>
+                  <div class="model-identifier">[[item.identifier]]</div>
+                </div>
                 <div>
-                  <hr>
-                  <img id="image" on-error="imageError" class="thumb owc-list-item-thumb" src=[[item.thumb]] alt="noimage">
-                  <!-- attributes list -->
-                  <b>{{i18n('Attribute')}}:</b> [[item.attribute.key1]]</div>
-                <div>
-                  <b>Attribute:</b> [[item.attribute.key2]]</div>
-                <div>
-                  <b>Attribute:</b> [[item.attribute.key3]]</div>
+                  <div>
+                    <b>UUID:</b>
+                    <div class="model-uuid">[[item.uuid]]</div>
+                  </div>
+                    <!-- <img id="image" class="thumb owc-list-item-thumb" src=[[item.thumb]] alt="noimage"> -->
+                    <!-- <b>{{i18n('Attribute')}}:</b> [[item.attribute.key1]]</div>
+                  <div>
+                    <b>Attribute:</b> [[item.attribute.key2]]</div>
+                  <div>
+                    <b>Attribute:</b> [[item.attribute.key3]]</div>  -->
               </div>
             </template>
-          </iron-list>
-          
         </template>
-      </div>
-      <hr>
-      <div id="scrollable" class="container">
-        <!-- List of Products -->
-        <template is="dom-if" if="[default]">
-          <div>Total items: {{items.length}}</div>
-          <iron-list id="ironlist" class="owclist" items="{{items}}" as="item" hidden="{{!visibleList}}">
-            <!-- List component template -->
-            <template>
-              <owc-ui-row-item></owc-ui-row-item>
-              <!-- <div class="item">
-                <div>{{index}}</div>
-                <div>
-                  <b>Title:</b> [[item.title]]</div>
-                <div>
-                  <hr>
-                  <img id="image" on-error="imageError" class="thumb owc-list-item-thumb" src=[[item.thumb]] alt="noimage">
-                  <b>{{i18n('Attribute')}}:</b> [[item.attribute.key1]]</div>
-                <div>
-                  <b>Attribute:</b> [[item.attribute.key2]]</div>
-                <div>
-                  <b>Attribute:</b> [[item.attribute.key3]]</div>
-              </div> -->
-            </template>
-          </iron-list>
-          
-        </template>
-      </div>
+        </div>
 
 
     </template>
@@ -139,6 +120,12 @@
               type: String,
               value: 'owc-ui-list'
             },
+
+            model: {
+              type: Array,
+              value: {}
+            },
+
             //scroll to target
             scrollTarget: HTMLElement,
 
@@ -462,8 +449,8 @@
           // var drawer =
           //   this.scrollTarget = Polymer.dom(this.root).querySelector('#scrollable');
           // this.scrollTarget.setAttribute("style", "overflow:auto;height:250px;width:500px");
-
           self.setItems();
+
           // this.trySearch();
         }
 
@@ -490,7 +477,7 @@
               }
             }
           ];
-          // console.log('test', jsonArrayResponse);
+          console.log('test', jsonArrayResponse);
 
         }
 
@@ -562,8 +549,8 @@
           var jsonModel = JSON.parse(jsonString);
           // console.log(jsonModel.length);
 
-
           //set local list with model
+          console.log('model: ', this.model);
           self.items = jsonModel;
         }
 
@@ -576,12 +563,12 @@
         // }
 
         //Test Connection
-        testConnection() {
-          var self = this;
-          var searchResult = self._ctx.am.testConnection();
-          // console.log('Test Connection: ', searchResult);
-          // self.setItems();
-        }
+        // testConnection() {
+        //   var self = this;
+        //   var searchResult = self._ctx.am.testConnection();
+        // console.log('Test Connection: ', searchResult);
+        // self.setItems();
+        // }
 
         /**
         * Private method used to update <b>listmodel</b>  property.
