@@ -41,10 +41,13 @@
       }
 
       .container {
-        height: 300px;
-        padding: 10px;
+        position: absolute;
+        width: 100%;
+        height: 70%;
+        padding: 10px 0px;
         overflow: auto;
         background-color: #ecf0f1;
+        bottom: 0px;
       }
 
       .viewport {
@@ -88,7 +91,7 @@
       }
 
       .info-container {
-        width: 50%; 
+        width: 60%;
         /* background-color: red; */
         word-break: keep-all;
         font-size: 12px;
@@ -130,10 +133,9 @@
                 <img src="../../images/placeholder.png" alt="alt" style="width:80px; height:80px;">
               </span>
               <span class="info-container">
-                Identifier:
-                <span class="model-identifier">[[item.identifier]]</span>
-                <br> UUID:
-                <span class="model-uuid">[[item.uuid]]</span>
+                <span class="model-identifier">Identifier: [[item.identifier]]</span>
+                <br> 
+                <span class="model-uuid">UUID: [[item.uuid]]</span>
               </span>
             </div>
           </template>
