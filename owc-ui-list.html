@@ -1,78 +1,18 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="../owc-ui-row-item/owc-ui-row-item.html">
 
 <dom-module id="owc-ui-list">
-  <!-- Component Template -->
   <template>
     <style>
-      .container {
-        position: absolute;
-        bottom: 0px;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-      }
-
-      .cont {
-        height: 150px;
+      .ui-list-container {
         background-color: #ecf0f1;
-      }
-
-      .itemz-container {
-        height: 130px;
-        border-bottom: 3px solid gray;
-        border-radius: 10px;
-        background-color: white;
-      }
-
-      .thumb-container {
-        float: left;
-        margin: 30px 10px;
-        width: 80px;
-        height: 80px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-
-      #thumbnail {
-        width: 80px;
-        height: 80px;
-      }
-
-      .info-container {
-        float: left;
-        margin: 40px 0px;
-        width: 60%;
-        height: 60px;
-        font-size: 12px;
-        word-break: keep-all;
-        text-align: justify;
       }
     </style>
 
-    <!--iron-list of Products -->
-    <iron-list class="container" items="{{model}}" as="item">
+    <iron-list class="ui-list-container" items="{{model}}" as="item">
       <template>
-        <div class="cont">
-          <div class="itemz-container">
-            <span class="thumb-container">
-              <template is="dom-if" if="[[!item.thumbnail]]">
-                <img id="thumbnail" src="../../images/placeholder.png" alt="no-image">
-              </template>
-              <template is="dom-if" if="[[item.thumbnail]]">
-                <img id="thumbnail" src="https://scihub.copernicus.eu/dhus/odata/v1/Products('[[item.uuid]]')/Products('Thumbnail')/$value" alt="no-image">
-              </template>
-            </span>
-            <span class="info-container">
-              <div>
-                <b>[[item.identifier]]</b>
-              </div>
-              <br>
-              <div>[[item.summary.0]]</div>
-              <div>[[item.summary.5]]</div>
-            </span>
-          </div>
-        </div>
+        <owc-ui-row-item model={{item}}></owc-ui-row-item>
       </template>
     </iron-list>
   </template>
@@ -87,28 +27,11 @@
           model: {
             type: Array,
             value: {}
-          },
-          thumbUrl: {
-            type: String,
-            value: "TEST URL"
-          },
-          baseUrl: {
-            type: String,
-            value: "https://scihub.copernicus.eu/dhus/odata/v1/Products('[[item.uuid]]')/Products('Thumbnail')/$value"
-          },
+          }
         };
       }
-
-      constructor() {
-        super();
-        var self = this;
-        self.baseUrl = 'https://scihub.copernicus.eu';
-      }
-
-      ready() {
-        super.ready();
-      }
     }
+
     window.customElements.define(OwcUiList.is, OwcUiList);
   </script>
 </dom-module>
