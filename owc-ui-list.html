@@ -9,7 +9,10 @@
         background-color: #ecf0f1;
       }
     </style>
-
+    <p>owc-ui-list</p>
+    <button on-click="subscribe">LIST SUB</button>
+    <button on-click="publish">LIST PUB</button>
+    <button on-click="unsubscribe">LIST UNSUB</button>
     <iron-list class="ui-list-container" items="{{model}}" as="item">
       <template>
         <owc-ui-row-item model={{item}}></owc-ui-row-item>
@@ -26,9 +29,39 @@
         return {
           model: {
             type: Array,
-            value: {}
+            value: []
           }
         };
+      }
+
+      ready() {
+        super.ready();
+        var self = this;
+        self.subscribe();
+      }
+
+      subscribe() {
+        console.log('owc-ui-list subscribe');
+        var self = this;
+        this._subscribe();
+      }
+
+      _subscribe() {
+        var self = this;
+        self.token = self._ctx.mb.subscribe('combo', function () {
+        self.model = [];
+        self.model = self._ctx.wm.res;
+        // this._ctx.mb.publish("combo");
+        self.render();
+        });
+      }
+
+      publish() {
+        var self = this
+        self.model = [];
+        self.model = self._ctx.wm.res;
+        // this._ctx.mb.publish("combo");
+        this.render();
       }
     }
 
