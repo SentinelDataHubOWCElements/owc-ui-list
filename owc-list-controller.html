@@ -1,0 +1,114 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-list/iron-list.html">
+
+<!-- Paginated List -->
+<dom-module id="owc-list-controller">
+  <template>
+    <style>
+      .paginated-buttons-table {
+        display: table;
+        text-align: center;
+        padding: 0px;
+        margin: 0% 2%;
+        width: 96%;
+        height: 80px;
+        background-color: darkcyan;
+      }
+
+      .paginated-buttons-table-cell {
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        background-color: lightgray;
+      }
+
+      paper-icon-button.paginated-icon-button {
+        margin: 0px;
+        padding: 0px;
+        width: 30px;
+        height: 30px;
+      }
+
+      paper-button.paginated-button {
+        margin: 0px;
+        padding: 0px;
+        width: 30%;
+        height: 50px;
+        font-size: 20px;
+        background: #002664;
+        color: white;
+      }
+
+      .red {
+        color: red;
+      }
+    </style>
+    <div class="paginated-buttons-table">
+      <div class="paginated-buttons-table-cell">
+          <paper-icon-button class="paginated-icon-button" slot="suffix" on-click="loadFirstPage" icon="home" alt="home" title="load First Page"></paper-icon-button>
+        <paper-button class='paginated-button' raised on-click="previousPage" title="Previous Page">&lt;</paper-button>
+        <paper-button class='paginated-button' raised on-click="nextPage" title="Next Page">&gt;</paper-button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class OwcListController extends Polymer.Element {
+      static get is() {
+        return 'owc-list-controller';
+      }
+      static get properties() {
+      }
+
+      ready() {
+        super.ready();
+        var self = this;
+
+        //CONTEXT ASSIGNMENT
+        self._ctx = ApplicationContext.getInstance().context;
+        console.warn("owc-paginated-list context is ", self._ctx);
+        self.subscribe();
+      }
+
+      loadFirstPage() {
+        var self = this;
+        console.warn("TODO LOAD FIRST PAGE");
+      }
+
+      previousPage() {
+        var self = this;
+        console.warn("TODO PREVIOUS PAGE");
+        self._ctx.mb.publish("previousPage");
+      }
+
+      nextPage() {
+        var self = this;
+        console.warn("TODO NEXT PAGE");
+        self._ctx.mb.publish("nextPage  ");
+      }
+
+      publish() {
+        this._ctx.mb.publish("combo");
+      }
+
+      subscribe() {
+        console.warn('subscribing owc-paginated-list');
+        this._subscribe();
+      }
+
+      _subscribe() {
+        this.token = this._ctx.mb.subscribe('combo', function () {
+        });
+      }
+
+      //Unsubscribe
+      unsubscribe() {
+        this._ctx.mb.unsubscribe(this.token);
+      }
+    }
+    window.customElements.define(OwcListController.is, OwcListController);
+  </script>
+</dom-module>

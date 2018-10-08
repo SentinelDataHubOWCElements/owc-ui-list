@@ -1,68 +1,18 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../iron-list/iron-list.html">
-<link rel="import" href="../owc-ui-row-item/owc-ui-row-item.html">
-<link rel="import" href="owc-ui-row-item.html">
+<link rel="import" href="owc-list-controller.html">
+<link rel="import" href="owc-simple-list.html">
 
+<!-- Container for owc-simple-list and owc-list-controller -->
 <dom-module id="owc-ui-list">
   <template>
-    <style>
-      .ui-list-container {
-        background-color: #ecf0f1;
-      }
-    </style>
-    <p>owc-ui-list</p>
-    <button on-click="subscribe">LIST SUB</button>
-    <button on-click="publish">LIST PUB</button>
-    <button on-click="unsubscribe">LIST UNSUB</button>
-    <iron-list class="ui-list-container" items="{{model}}" as="item">
-      <template>
-        <owc-ui-row-item model={{item}}></owc-ui-row-item>
-      </template>
-    </iron-list>
+    <owc-list-controller></owc-list-controller>
+    <owc-simple-list></owc-simple-list>
   </template>
 
   <script>
     class OwcUiList extends Polymer.Element {
       static get is() {
         return 'owc-ui-list';
-      }
-      static get properties() {
-        return {
-          model: {
-            type: Array,
-            value: []
-          }
-        };
-      }
-
-      ready() {
-        super.ready();
-        var self = this;
-        self.subscribe();
-      }
-
-      subscribe() {
-        console.log('owc-ui-list subscribe');
-        var self = this;
-        this._subscribe();
-      }
-
-      _subscribe() {
-        var self = this;
-        self.token = self._ctx.mb.subscribe('combo', function () {
-        self.model = [];
-        self.model = self._ctx.wm.res;
-        // this._ctx.mb.publish("combo");
-        self.render();
-        });
-      }
-
-      publish() {
-        var self = this
-        self.model = [];
-        self.model = self._ctx.wm.res;
-        // this._ctx.mb.publish("combo");
-        this.render();
       }
     }
 

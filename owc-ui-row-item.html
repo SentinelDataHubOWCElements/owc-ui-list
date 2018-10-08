@@ -1,57 +1,75 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
+<!-- Row Item Template
+  Contains:
+  - Title
+  - Thmbanail
+  - A List of Attributes of different length
+-->
+
 <dom-module id="owc-ui-row-item">
   <template>
     <style>
-      .ui-row-item-container {
+      #row-container {
         height: 150px;
         margin: 10px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
         border-radius: 10px;
-        background-color: white;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .thumb-container {
-        float: left;
-        margin: 30px 10px;
+      /* Left Section Container */
+      .left-section {
+        position: absolute;
+        margin-left: 10px;
+        top: 50px;
+        height: 80px;
+        width: 80px;
+      }
+
+      /* Right Section Container */
+      .right-section {
+        position: absolute;
+        left: 110px;
+        width: calc(100% - 100px);
+        border-radius: 0px 10px 10px 0px;
+      }
+
+      /* Thumbnail Style */
+      .thumbnail {
         width: 80px;
         height: 80px;
-        border: 2px solid #ddd;
-        border-radius: 4px;
       }
 
-      #thumbnail {
-        width: 80px;
-        height: 80px;
-      }
-
-      .info-container {
-        float: left;
-        margin: 30px 0px;
-        width: 60%;
-        height: 60px;
-        font-size: 12px;
-        word-break: keep-all;
-        text-align: justify;
-      }
-
-      .item-title {
+      /* Title style */
+      #row-attr-title {
         font-weight: bold;
-        margin-bottom: 5px;
+        margin: 5px 0px;
       }
+
+      /* Attributes Style */
+      .row-attr-item {
+        font-size: 14px;
+        color: #333333;
+      }
+
     </style>
-    <div class="ui-row-item-container">
-      <span class="thumb-container">
+    <div id="row-container">
+      <span class="left-section">
         <template is="dom-if" if="[[!model.thumb]]">
-          <img id="thumbnail" src="../../images/placeholder.png" alt="no-placeholder">
+          <img class="thumbnail" src="../../images/placeholder.png">
         </template>
         <template is="dom-if" if="[[model.thumb]]">
-          <img id="thumbnail" src="[[model.url]]/odata/v1/Products('[[model.thumbUrl]]')/Products('Thumbnail')/$value" alt="no-image">
+          <img class="thumbnail" src="[[model.url]]/odata/v1/Products('[[model.thumbUrl]]')/Products('Thumbnail')/$value">
         </template>
       </span>
-      <span class="info-container">
-        <div class="item-title">[[model.title]]</div>
-        <div>[[model.attributes]]</div>
+      <span class="right-section">
+        <div id="row-attr-title">[[model.title]]</div>
+        <template is="dom-repeat" items="[[model.attributes]]">
+          <div class="row-attr-item">{{item}}</div>
+        </template>
       </span>
     </div>
   </template>
@@ -64,9 +82,10 @@
       static get properties() {
         return {
           model: {}
-        }
+        } 
       }
     }
+
     window.customElements.define(OwcUiRowItem.is, OwcUiRowItem);
   </script>
 </dom-module>

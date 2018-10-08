@@ -1,0 +1,43 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-list/iron-list.html">
+<link rel="import" href="owc-ui-row-item.html">
+
+<!-- ArrayAdapter -->
+<!-- Its model is an array of row-items -->
+<dom-module id="owc-simple-list">
+  <template>
+    <style></style>
+      <iron-list items="{{model}}" as="item">
+        <template>
+          <owc-ui-row-item model={{item}}></owc-ui-row-item>
+        </template>
+      </iron-list>
+  </template>
+
+  <script>
+    class OwcSimpleList extends Polymer.Element {
+      static get is() { return 'owc-simple-list'; }
+      static get properties() {
+        return {
+          model: {
+            type: Array,
+            value: []
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        var self = this;
+        self._ctx = ApplicationContext.getInstance().context; //Assign Global Context
+
+        //SUBSCRIBE to Message Broker TOPIC 
+        self._ctx.mb.subscribe('search', function () {
+          self.model = [];
+          self.model = self._ctx.resource; //Get DataSource Context
+        });
+      }
+    }
+    window.customElements.define(OwcSimpleList.is, OwcSimpleList);
+  </script>
+</dom-module>
