@@ -46,11 +46,17 @@
         color: red;
       }
     </style>
-    <div class="paginated-buttons-table">
-      <div class="paginated-buttons-table-cell">
-          <paper-icon-button class="paginated-icon-button" slot="suffix" on-click="loadFirstPage" icon="home" alt="home" title="load First Page"></paper-icon-button>
-        <paper-button class='paginated-button' raised on-click="previousPage" title="Previous Page">&lt;</paper-button>
-        <paper-button class='paginated-button' raised on-click="nextPage" title="Next Page">&gt;</paper-button>
+    <div hidden$="{{isEmptyModel}}">
+      <div class="paginated-buttons-table">
+        <div class="paginated-buttons-table-cell">
+          <paper-icon-button class="paginated-icon-button" slot="suffix" on-click="btnHome" icon="home"></paper-icon-button>
+          <paper-button class='paginated-button' raised on-click="btnGetPreviousPage">
+            <paper-icon-button icon="chevron-left"></paper-icon-button>
+          </paper-button>
+          <paper-button class='paginated-button' raised on-click="btnGetNextPage">
+            <paper-icon-button icon="chevron-right"></paper-icon-button>
+          </paper-button>
+        </div>
       </div>
     </div>
   </template>
@@ -61,6 +67,24 @@
         return 'owc-list-controller';
       }
       static get properties() {
+        return {
+          currentPage: {
+            type: Number,
+            value: 0
+          },
+          query: {
+            type: String,
+            value: "default"
+          },
+          model: {
+            type: Array,
+            value: []
+          },
+          isEmptyModel: {
+            type: Boolean,
+            value: true
+          }
+        };
       }
 
       ready() {
@@ -69,44 +93,61 @@
 
         //CONTEXT ASSIGNMENT
         self._ctx = ApplicationContext.getInstance().context;
-        console.warn("owc-paginated-list context is ", self._ctx);
-        self.subscribe();
+
+        //Set DataSource Model to Simple List Model as soonas search is completed
+        self._ctx.mb.subscribe('search', function () {
+          self.setModel();
+        });
+        console.log('isEmptModel: ', self.isEmptyModel);
+
       }
 
+      //Set Simple List Model
+      setModel() {
+        var self = this;
+        self.model.length = 0;
+        self._ctx.sl.model.length = 0;
+        self._ctx.sl.model = self._ctx.ds.model; //Set Simple List model
+        console.warn('setting model to simple list:', self._ctx.sl.model);
+        self.isEmptyModel = false;
+      }
+
+      //UI Controllers
+
+      // @Controller
+      btnHome() {
+        var self = this;
+        self.loadFirstPage();
+      }
+
+      // @Controller
+      btnGetPreviousPage() {
+        var self = this;
+        self.loadPreviousPage();
+      }
+
+      // @Controller
+      btnGetNextPage() {
+        var self = this;
+        self.loadNextPage();
+      }
+
+      // @Service
       loadFirstPage() {
         var self = this;
-        console.warn("TODO LOAD FIRST PAGE");
+        self._ctx.ds.loadHomePage();
       }
 
-      previousPage() {
+      // @Service
+      loadPreviousPage() {
         var self = this;
-        console.warn("TODO PREVIOUS PAGE");
-        self._ctx.mb.publish("previousPage");
+        self._ctx.ds.loadPreviousPage();
       }
 
-      nextPage() {
+      // @Service
+      loadNextPage() {
         var self = this;
-        console.warn("TODO NEXT PAGE");
-        self._ctx.mb.publish("nextPage  ");
-      }
-
-      publish() {
-        this._ctx.mb.publish("combo");
-      }
-
-      subscribe() {
-        console.warn('subscribing owc-paginated-list');
-        this._subscribe();
-      }
-
-      _subscribe() {
-        this.token = this._ctx.mb.subscribe('combo', function () {
-        });
-      }
-
-      //Unsubscribe
-      unsubscribe() {
-        this._ctx.mb.unsubscribe(this.token);
+        self._ctx.ds.loadNextPage();
       }
     }
     window.customElements.define(OwcListController.is, OwcListController);

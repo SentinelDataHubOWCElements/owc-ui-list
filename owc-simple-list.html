@@ -30,12 +30,7 @@
         super.ready();
         var self = this;
         self._ctx = ApplicationContext.getInstance().context; //Assign Global Context
-
-        //SUBSCRIBE to Message Broker TOPIC 
-        self._ctx.mb.subscribe('search', function () {
-          self.model = [];
-          self.model = self._ctx.resource; //Get DataSource Context
-        });
+        self._ctx.sl = self; //assign itself to global context
       }
     }
     window.customElements.define(OwcSimpleList.is, OwcSimpleList);
