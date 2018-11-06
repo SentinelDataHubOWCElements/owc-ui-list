@@ -1,33 +1,18 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="owc-list-controller.html">
+<link rel="import" href="owc-simple-list.html">
 
+<!-- Container for owc-simple-list and owc-list-controller -->
 <dom-module id="owc-ui-list">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
+    <owc-list-controller></owc-list-controller>
+    <owc-simple-list></owc-simple-list>
   </template>
 
   <script>
-    /**
-     * `owc-ui-list`
-     * Owc List Component
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
     class OwcUiList extends Polymer.Element {
-      static get is() { return 'owc-ui-list'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'owc-ui-list'
-          }
-        };
+      static get is() {
+        return 'owc-ui-list';
       }
     }
 

@@ -1,0 +1,155 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-list/iron-list.html">
+
+<!-- Paginated List -->
+<dom-module id="owc-list-controller">
+  <template>
+    <style>
+      .paginated-buttons-table {
+        display: table;
+        text-align: center;
+        padding: 0px;
+        margin: 0% 2%;
+        width: 96%;
+        height: 80px;
+        background-color: darkcyan;
+      }
+
+      .paginated-buttons-table-cell {
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        background-color: lightgray;
+      }
+
+      paper-icon-button.paginated-icon-button {
+        margin: 0px;
+        padding: 0px;
+        width: 30px;
+        height: 30px;
+      }
+
+      paper-button.paginated-button {
+        margin: 0px;
+        padding: 0px;
+        width: 30%;
+        height: 50px;
+        font-size: 20px;
+        background: #002664;
+        color: white;
+      }
+
+      .red {
+        color: red;
+      }
+    </style>
+    <div hidden$="{{isEmptyModel}}">
+      <div class="paginated-buttons-table">
+        <div class="paginated-buttons-table-cell">
+          <paper-icon-button class="paginated-icon-button" slot="suffix" on-click="btnHome" icon="home"></paper-icon-button>
+          <paper-button class='paginated-button' raised on-click="btnGetPreviousPage">
+            <paper-icon-button icon="chevron-left"></paper-icon-button>
+          </paper-button>
+          <paper-button class='paginated-button' raised on-click="btnGetNextPage">
+            <paper-icon-button icon="chevron-right"></paper-icon-button>
+          </paper-button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class OwcListController extends Polymer.Element {
+      static get is() {
+        return 'owc-list-controller';
+      }
+      static get properties() {
+        return {
+          currentPage: {
+            type: Number,
+            value: 0
+          },
+          query: {
+            type: String,
+            value: "default"
+          },
+          model: {
+            type: Array,
+            value: []
+          },
+          isEmptyModel: {
+            type: Boolean,
+            value: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        var self = this;
+
+        //CONTEXT ASSIGNMENT
+        self._ctx = ApplicationContext.getInstance().context;
+
+        //Set DataSource Model to Simple List Model as soonas search is completed
+        self._ctx.mb.subscribe('search', function () {
+          self.setModel();
+        });
+        console.log('isEmptModel: ', self.isEmptyModel);
+
+      }
+
+      //Set Simple List Model
+      setModel() {
+        var self = this;
+        self.model.length = 0;
+        self._ctx.sl.model.length = 0;
+        self._ctx.sl.model = self._ctx.ds.model; //Set Simple List model
+        console.warn('setting model to simple list:', self._ctx.sl.model);
+        self.isEmptyModel = false;
+      }
+
+      //UI Controllers
+
+      // @Controller
+      btnHome() {
+        var self = this;
+        self.loadFirstPage();
+      }
+
+      // @Controller
+      btnGetPreviousPage() {
+        var self = this;
+        self.loadPreviousPage();
+      }
+
+      // @Controller
+      btnGetNextPage() {
+        var self = this;
+        self.loadNextPage();
+      }
+
+      // @Service
+      loadFirstPage() {
+        var self = this;
+        self._ctx.ds.loadHomePage();
+      }
+
+      // @Service
+      loadPreviousPage() {
+        var self = this;
+        self._ctx.ds.loadPreviousPage();
+      }
+
+      // @Service
+      loadNextPage() {
+        var self = this;
+        self._ctx.ds.loadNextPage();
+      }
+    }
+    window.customElements.define(OwcListController.is, OwcListController);
+  </script>
+</dom-module>

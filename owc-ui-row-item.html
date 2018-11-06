@@ -1,0 +1,94 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<!-- Row Item Template
+  Contains:
+  - Title
+  - Thmbanail
+  - A List of Attributes of different length
+-->
+
+<dom-module id="owc-ui-row-item">
+  <template>
+    <style>
+      :host {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      }
+      #row-container {
+        height: 150px;
+        margin: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        border-radius: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Left Section Container */
+      .left-section {
+        position: absolute;
+        margin-left: 10px;
+        top: 50px;
+        height: 80px;
+        width: 80px;
+      }
+
+      /* Right Section Container */
+      .right-section {
+        position: absolute;
+        left: 110px;
+        width: calc(100% - 100px);
+        border-radius: 0px 10px 10px 0px;
+      }
+
+      /* Thumbnail Style */
+      .thumbnail {
+        width: 80px;
+        height: 80px;
+      }
+
+      /* Title style */
+      #row-attr-title {
+        font-weight: bold;
+        margin: 5px 0px;
+      }
+
+      /* Attributes Style */
+      .row-attr-item {
+        font-size: 14px;
+        color: #333333;
+      }
+
+    </style>
+    <div id="row-container">
+      <span class="left-section">
+        <template is="dom-if" if="[[!model.thumb]]">
+          <img class="thumbnail" src="../../images/placeholder.png">
+        </template>
+        <template is="dom-if" if="[[model.thumb]]">
+          <img class="thumbnail" src="[[model.url]]/odata/v1/Products('[[model.thumbUrl]]')/Products('Thumbnail')/$value">
+        </template>
+      </span>
+      <span class="right-section">
+        <div id="row-attr-title">[[model.title]]</div>
+        <template is="dom-repeat" items="[[model.attributes]]">
+          <div class="row-attr-item">{{item}}</div>
+        </template>
+      </span>
+    </div>
+  </template>
+
+  <script>
+    class OwcUiRowItem extends Polymer.Element {
+      static get is() {
+        return 'owc-ui-row-item';
+      }
+      static get properties() {
+        return {
+          model: {}
+        } 
+      }
+    }
+
+    window.customElements.define(OwcUiRowItem.is, OwcUiRowItem);
+  </script>
+</dom-module>
